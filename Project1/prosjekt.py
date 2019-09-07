@@ -82,7 +82,6 @@ def optimized(n, h):
 
     for i in range(N-2, -1, -1):  # optimized algorithm for the backwards substitution
         u_s[i] = (f_s[i] + u_s[i+1])/b_s[i]
-
     end = time.time()
 
     print('time spent for n = %g points with optimized algorithm was %.7e s' % (n, end - start))
