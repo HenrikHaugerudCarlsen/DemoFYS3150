@@ -7,6 +7,7 @@
 \usepackage{hyperref}
 \usepackage{float}
 \usepackage{gensymb}
+\usepackage{amsmath}
 
 \title{FYS2150: Magnetisme}
 \author{Henrik Haugerud Carlsen}
@@ -107,20 +108,204 @@ This does not correspond with the matrix A given by the problem set.
  
  and so on. This leaves us at a general expression for the rows in the matrix as:
  \begin{equation}
- -u(n) + u(n-2) - 2u(n-1) = b`_n\;.
+ -u(n)  - 2u(n-1) + u(n-2)= b`_n\;.
  \label{eq13}
  \end{equation}
  
-If we assume that our function
+ If we insert this for every row in the matrix we end up with a matrix of the from $A\vec{v} = \vec{b`}$.
  
- 
-
-  
-
-
-
-
 \section{Method}
+\subsection{General algorithm}
+To solve a set of linear equations of the form $A\vec{v} = \vec{b`}$ an algorithm is developed from the Forward and backward Euler methods. 
+
+$$
+    A = \begin{bmatrix}
+                           b_1& c_1 & 0 &\dots   & \dots &\dots \\
+                           a_1 & b_2 & c_2 &\dots &\dots &\dots \\
+                           & a_2 & b_3 & c_3 & \dots & \dots \\
+                           & \dots   & \dots &\dots   &\dots & \dots \\
+                           &   &  &a_{n-2}  &b_{n-1}& c_{n-1} \\
+                           &    &  &   &a_{n-1} & b_n \\
+                      \end{bmatrix}\begin{bmatrix}
+                           v_1\\
+                           v_2\\
+                           \dots \\
+                          \dots  \\
+                          \dots \\
+                           v_n\\
+                      \end{bmatrix}
+  =\begin{bmatrix}
+                           f_1\\
+                           f_2\\
+                           \dots \\
+                           \dots \\
+                          \dots \\
+                           f_n\\
+                      \end{bmatrix}.
+$$
+Our matrix is a tridiagonal one so the first step in the algorithm focuses on making the matrix an upper diagonal matrix, in other words eliminating the elements, $a_i$, below the diagonal. To accomplish this every element $b_i$ has to be mulitiplied by a factor which makes it so that when its is subtracted from the $a_i$ elements the new element is zero. The algorithm is known as the Forward substitution method:
+
+\begin{equation}
+b`_i = b_i - \frac{a_{i-1}c_{i-1}}{b`_{i-1}}\;,
+\label{Forwardb}
+\end{equation}
+
+with the corresponding equation for the updated $f_i$`s:
+
+\begin{equation}
+f`_i = f_i - \frac{a_{i-1}f`_{i-1}}{b`_{i-1}}\;.
+\label{Forwardf}
+\end{equation}
+ The updated matrix then becomes an upper triangular matrix:
+ 
+ $$
+    A = \begin{bmatrix}
+                           b_1& c_1 & 0 &\dots   & \dots &\dots \\
+                           0 & b`_2 & c_2 &\dots &\dots &\dots \\
+                           & 0& b`_3 & c_3 & \dots & \dots \\
+                           & \dots   & \dots &\dots   &\dots & \dots \\
+                           &   &  &0  &b`_{n-1}& c_{n-1} \\
+                           &    &  &   &0& b`_n \\
+                      \end{bmatrix}\begin{bmatrix}
+                           v_1\\
+                           v_2\\
+                           \dots \\
+                          \dots  \\
+                          \dots \\
+                           v_n\\
+                      \end{bmatrix}
+  =\begin{bmatrix}
+                           f_1\\
+                           f`_2\\
+                           \dots \\
+                           \dots \\
+                          \dots \\
+                           f`_n\\
+                      \end{bmatrix}.
+$$
+Next step is to perform backward substitution which gives us the final diagonal elements:
+
+\begin{equation}
+u_i = (f`_i - c_iu_{i+1})/b`_i\;.
+\label{Backward}
+\end{equation} 
+
+Written i pseudocode this method will look like:
+
+for $i$ in $2,3, ..., n$:
+$$
+	b`_i = b_i - \frac{a_{i-1}c_{i-1}}{b`_{i-1}}
+$$
+$$
+	f`_i = f_i - \frac{a_{i-1}f`_{i-1}}{b`_{i-1}}
+$$
+$$
+	u_i = \frac{f`_i - c_iu_{i+1}}{b`_i}
+$$
+This loop ends up using 9n FLOPS.
+
+\subsection{specialized algorithm}
+
+The previous algorithm was made for the general case where knowledge of the elements where more limited. For the case where we know that all the elements $a_i = -1$ and $c_i = -1$ we can write a more effective algorithm to solve the problem. If we write out the calculations we need to find the $b`_i$ elements we get
+
+$$
+b`_1 = 2
+$$
+$$
+b`2 = 2-\frac{1}{2} = \frac{3}{2}
+$$
+$$
+b`_3 = 2 - \frac{2}{3} = \frac{4}{3}
+$$
+$$
+b`_4 =  2- 3\frac{3}{4} = \frac{5}{4}
+$$
+We recognize the pattern as
+
+\begin{equation}
+b`_i = \frac{i+1}{i}\;.
+\label{Specialb}
+\end{equation}
+
+Because we know the constants $a_i$ and $c_i$ the updated values of $f_i$ and $u_i$ becomes:
+
+\begin{equation}
+f`_i = f_i + \frac{f_{i-1}}{b_{i-1}}
+\label{Specialf}
+\end{equation}
+
+\begin{equation}
+u_i = \frac{f`_i + u_{i+1}}{b`_i}
+\label{Specialu}
+\end{equation}
+
+So the pseudocode becomes:
+
+for $i$ in $2,3, ..., n$:
+
+$$
+b`_i = \frac{i+1}{i}\;.
+$$
+$$
+f`_i = f_i + \frac{f_{i-1}}{b_{i-1}}
+$$
+$$
+u_i = \frac{f`_i -c_iu_{i+1}}{b`_i}
+$$
+
+This method only uses 4N FLOPS, so it the special algorithm is faster than the general one, as expected. 
+
+\subsection{LU decomposition}
+
+We will compare the previously discussed methods with LU decomposition. LU decomposition takes the matrix, $A$, and writes it as a matrixproduct of a lower triangular matrix, $L$, and an upper triangular matrix, $U$. 
+
+$$
+    L = \begin{bmatrix}
+                           1& 0 & \dots  &\dots   & \dots &\dots \\
+                           l_{21} & 1 & 0 &\dots &\dots &\dots \\
+                           l_{31}& l_{32}& 1 & 0 & \dots & \dots \\
+                           \dots& \dots   & \dots &\dots   &\dots & \dots \\
+                           \dots&  \dots &\dots  &\dots &1& 0 \\
+                           l_{i1}& \dots   & \dots & \dots  &l_{ij-1}& 1\\
+                      \end{bmatrix}
+                      $$
+                      $$
+    	U = \begin{bmatrix}
+                           u_{11}& u_{12} & \dots &\dots   & \dots &u_{1j} \\
+                           0 & u_{22} & \dots &\dots &\dots &\dots \\
+                          \dots & 0& u_{33} & \dots & \dots & \dots \\
+                         \dots  & \dots   & \dots &\dots   &\dots & \dots \\
+                          \dots &\dots   & \dots &0  &\dots& \dots \\
+                           \dots&  \dots  &\dots  &  \dots &0& u_{ij}\\
+                      \end{bmatrix}$$
+ \newline
+The elements can be found by first calculating the elements $u_{1j} = a_{1j}$, then calculating the elements $u_{ij}$, where $i = 2, 3, ..., j-1$, with the following equation:
+
+\begin{equation}
+u_{ij} = a_{ij} - \sum_{k=1}^{i-1} l_{ik}u_{kj}\;.
+\label{LUu}
+\end{equation}
+
+Then find the diagonal elements from
+
+\begin{equation}
+u_{jj} = a_{jj} - \sum_{k=1}^{j-1} l_{jk}u_{kj}\;.
+\label{LUdiagonal}
+\end{equation}
+
+Lastly calculate the remaining elements:
+
+\begin{equation}
+l_{ij} = \frac{1}{u_{jj}}(a_{ij} - \sum_{k=1}^{i-1}l_{ik}u_{kj}\;.
+\label{LUl}
+\end{equation}
+
+When this is done the decomposed system can be solved by first solving $L\vec{z} = \vec{f}$, then solving $U\vec{x} = \vec{z}$. Here we set $U\vec{x} = \vec{z}$. What we end up with is a system which can be solved by $for$ loops without more decomposition.
+
+
+
+
+
 
 \section{Results}
 
