@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.10.18)  8 SEP 2019 21:45
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.10.18)  8 SEP 2019 21:55
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -382,25 +382,15 @@ Package atveryend Info: Empty hook `AfterLastShipout' on input line 315.
  (./Fys3150_Project1.aux)
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 315.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 315.
-
-
-Package rerunfilecheck Warning: File `Fys3150_Project1.out' has changed.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
-
-Package rerunfilecheck Info: Checksums for `Fys3150_Project1.out':
-(rerunfilecheck)             Before: D41D8CD98F00B204E9800998ECF8427E;0
-(rerunfilecheck)             After:  F40DAF53229CAAA32CA5FDF80AB42D7A;376.
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
+Package rerunfilecheck Info: File `Fys3150_Project1.out' has not changed.
+(rerunfilecheck)             Checksum: F40DAF53229CAAA32CA5FDF80AB42D7A;376.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 315.
  ) 
 Here is how much of TeX's memory you used:
- 6166 strings out of 492649
- 88468 string characters out of 6129621
- 186674 words of memory out of 5000000
- 9928 multiletter control sequences out of 15000+600000
+ 6174 strings out of 492649
+ 88562 string characters out of 6129621
+ 187694 words of memory out of 5000000
+ 9936 multiletter control sequences out of 15000+600000
  33505 words of font info for 78 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  28i,7n,28p,465b,344s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -414,10 +404,10 @@ e/2018/texmf-dist/fonts/type1/public/mathpazo/fplmr.pfb></usr/local/texlive/201
 xmf-dist/fonts/type1/urw/palatino/uplb8a.pfb></usr/local/texlive/2018/texmf-dis
 t/fonts/type1/urw/palatino/uplr8a.pfb></usr/local/texlive/2018/texmf-dist/fonts
 /type1/urw/palatino/uplri8a.pfb>
-Output written on Fys3150_Project1.pdf (5 pages, 98655 bytes).
+Output written on Fys3150_Project1.pdf (5 pages, 99256 bytes).
 PDF statistics:
- 101 PDF objects out of 1000 (max. 8388607)
- 84 compressed objects within 1 object stream
+ 124 PDF objects out of 1000 (max. 8388607)
+ 106 compressed objects within 2 object streams
  35 named destinations out of 1000 (max. 500000)
- 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 57 words of extra memory for PDF output out of 10000 (max. 10000000)
 
