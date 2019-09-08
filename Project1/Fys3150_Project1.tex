@@ -1,0 +1,131 @@
+\documentclass[english,a4paper, 11pt]{article}
+\usepackage[T1]{fontenc} %for å bruke æøå
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx} %for å inkludere grafikk
+\usepackage{verbatim} %for å inkludere filer med tegn LaTeX ikke liker
+\usepackage{mathpazo}
+\usepackage{hyperref}
+\usepackage{float}
+\usepackage{gensymb}
+
+\title{FYS2150: Magnetisme}
+\author{Henrik Haugerud Carlsen}
+\date{\today}
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\centering
+Often physical systems can be described by linear second-order differential equations, for example the Poisson equation used in electromagnetism. The aim of this report is to rewrite the one-dimensional Poisson equation as a set of linear equations and solve it numerically using algorithms based on the Gaussian elimination method and LU decomposition. The number of FLOPS used by the algorithms and their relative error will be calculated. 
+\end{abstract}
+
+
+\section{Introduction}
+The electrostatc potential, $\vec{\phi}$, generated from a localized charge distribution, $\rho(\vec{r})$, in three dimensions can be described by Poissons equation as follows:
+
+\begin{equation}
+\nabla^2 \vec{\phi} = -4\pi \rho(\vec{r}).
+\label{eq1}
+\end{equation}
+
+This can be simplified by utilising the spherical symmetry, which tells us that the potential is constant at at given radius away from the charge distribution independent of change in the polar and/or the asimuttal angle. We can then rewrite the expression to a one-dimensional equation:
+
+\begin{equation}
+\frac{1}{r^2} \frac{d}{dr} (r^2\frac{d \vec{\phi}}{dr}) = -4\pi\rho(\vec{r}).
+\label{eq2}
+\end{equation}
+
+By substituting $\vec{\phi} = \frac{\phi(r)}{r}$, we get:
+
+\begin{equation}
+\frac{d^2 \phi}{dr^2} = -4 \pi r \rho(r) \;,
+\label{eq3}
+\end{equation}
+
+and by letting $\phi \rightarrow u$ and $r \rightarrow x$ we get an expression of the general Poisson equation as
+
+\begin{equation}
+-u``(x) = f(x)\;.
+\label{eq4}
+\end{equation}
+Where $x \in (0,1)$.
+This can be translated to a set of linear equations. Our problem also contains the boundary conditions $u(0) = u(1) =0$. Discretizing this equation we get the well known expression for the double derivative:
+
+\begin{equation}
+-\frac{v_{i+1} + v_{i-1} - 2v_i}{h^2} = f_i \, 
+\label{eq5}
+\end{equation}
+where $i = 1, 2,..., n$.
+
+To be able to use the Gaussian elimination method an LU decomposition to solve the problem we first have to show that the set of linear equations can be rewritten as 
+
+\begin{equation}
+A\vec{v} = \vec{b`} \;,
+\label{eq6}
+\end{equation}
+ where A is an $n \times n$ tridiagonal matrix. The elements of $\vec{b`}$ is $b`_i = h^2f_i$. First we start by writing out the expression with $i=1$, getting:
+ 
+ \begin{equation}
+ -v_2 + v_0 -2v_i = h^2f_1 = b`_1\;.
+ \label{eq7}
+ \end{equation}
+ Which translates to
+ 
+ \begin{equation}
+ -u(2) + u(0) - 2u(1) = h^2f(1)
+ \label{eq8}
+ \end{equation}
+ 
+Inserting the boundary condition $v(0)= v(1) = 0$ we end up with
+
+\begin{equation}
+-u(2) = h^2f(1)\;.
+\label{eq9}
+\end{equation}
+This does not correspond with the matrix A given by the problem set.
+
+ If we do the same for $i=2$ we end up with
+ \begin{equation}
+ -u(3) -2u(2) = b`-2\;.
+ \label{eq10}
+ \end{equation}
+  
+ And for $i = 3$  we get 
+ 
+ \begin{equation}
+ -u(4) + u(2) - 2u(3) = h^2f(2)\;,
+ \label{eq11}
+ \end{equation}
+ 
+ and for $i = 4$ we get
+ 
+ \begin{equation}
+ -u(5) + u(3) -2u(4) = h^2f(3)\;,
+ \label{eq12}
+ \end{equation}
+ 
+ and so on. This leaves us at a general expression for the rows in the matrix as:
+ \begin{equation}
+ -u(n) + u(n-2) - 2u(n-1) = b`_n\;.
+ \label{eq13}
+ \end{equation}
+ 
+If we assume that our function
+ 
+ 
+
+  
+
+
+
+
+\section{Method}
+
+\section{Results}
+
+\section{References}
+
+
+\end{document}
+
