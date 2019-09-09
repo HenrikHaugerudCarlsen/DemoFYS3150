@@ -19,6 +19,7 @@
 \begin{abstract}
 \centering
 Often physical systems can be described by linear second-order differential equations, for example the Poisson equation used in electromagnetism. The aim of this report is to rewrite the one-dimensional Poisson equation as a set of linear equations and solve it numerically using algorithms based on the Gaussian elimination method and LU decomposition. The number of FLOPS used by the algorithms and their relative error will be calculated. 
+The specialized algoritm, where the elements below and above the matrix diagonal, was found to be the fastest method for solving the Poisson equation numerically. Also the algorithms relative error was smallest when the steplenght used in the computatitons was of magnitude $10^{-6}$.
 \end{abstract}
 
 
@@ -301,9 +302,18 @@ l_{ij} = \frac{1}{u_{jj}}(a_{ij} - \sum_{k=1}^{i-1}l_{ik}u_{kj}\;.
 \end{equation}
 
 When this is done the decomposed system can be solved by first solving $L\vec{z} = \vec{f}$, then solving $U\vec{x} = \vec{z}$. Here we set $U\vec{x} = \vec{z}$. What we end up with is a system which can be solved by $for$ loops without more decomposition.
+\newline
 
-The LU decomposition program used in this paper is taken from
+For the code used in this paper to used in this paper for LU decomposition see [1].
 
+
+\subsection{Relative error}
+The relative error, $\epsilon_i$ for each iteration, is given by 
+
+\begin{equation}
+\epsilon_i = log_{10}(|\frac{v_i - u_i}{u_i}|)\;.
+\label{error}
+\end{equation}
 
 
 
@@ -311,39 +321,39 @@ The LU decomposition program used in this paper is taken from
 
 \section{Results}
 
-Using both our general and specialized algorithm we can compute the numerical solution to our matrix equation. This was done for $n$ that ranged from $n = 10^1$ up to $n = 10^7$. Here the resulting plots for $n = 10, 10^3$ and $10^5$ is shown. That gives the plots
-
-\begin{figure}[h]
+Using both our general and specialized algorithm we can compute the numerical solution to our matrix equation. This was done for an $n$ ranging from $n = 10^1$ up to $n = 10^7$. The plots for $n = 10, 10^3$ and $10^5$ is show subsequently.
+\begin{figure}[H]
 \centering
 \includegraphics[scale=0.5]{poisson_n1.png}
-\caption{analytical, general and specialized solution to the poisson equation for $n = 10^1$}\label{fig1}
+\caption{Analytical, general and specialized solution to the poisson equation for $n = 10^1$}\label{fig1}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[H]
 \centering
 \includegraphics[scale=0.5]{poisson_n3.png}
-\caption{analytical, general and specialized solution to the poisson equation for $n = 10^3$}\label{fig2}
+\caption{Analytical, general and specialized solution to the poisson equation for $n = 10^3$}\label{fig2}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[H]
 \centering
 \includegraphics[scale=0.5]{poisson_n5.png}
-\caption{analytical, general and specialized solution to the poisson equation for $n = 10^5$}\label{fig3}
+\caption{Analytical, general and specialized solution to the poisson equation for $n = 10^5$}\label{fig3}
 \end{figure}
 
-At the same time we computed the relative error of the specialized algorithm against the analytical solution to our problem so we could get a relation between the max relative error of the calculations and the steplengths, $h$. This was found using equation \ref{eq?} and by plotting the maximum error of each steplength as a function of the briggsian logarithm of $h$ we got the plot 
+At the same time we computed the relative error of the specialized algorithm against the analytical solution. This was done to get a relation between the max relative error of the calculations and the steplengths, $h$. For this, equation \ref{error} was used. By plotting the maximum error of each steplength as a function of the briggsian logarithm of $h$ we got the plot 
 
-\begin{figure}[h]
+\begin{figure}[H]
 \centering
 \includegraphics[scale=0.5]{max_rel_error.png}
-\caption{the max relative error plotted as a function of $log_{10}(h)$}\label{fig4}
+\caption{The max relative error plotted as a function of $log_{10}(h)$ is shown.}\label{fig4}
 \end{figure}
 
-the time spent computing the numerical solution was found, there was also used a even more general LU decomposition algorithm to compare the time spent. The time spent is presented in a tabular form
+The speed of computations is shown in table \ref{speed}. There was also used an even more general LU decomposition algorithm that was compared to the time consumption of the general and special algorithm. The time spent is presented in a tabular form here:
 
-\begin{table}[h]
-\caption{time spent for general, specialized and LU decomposition for the different $n$}\label{tab1}\center
+\begin{table}[H]
+\caption{time spent for general, specialized and LU decomposition for the different $n$}\label{speed}\center
 \begin{tabular}{|c|c|c|c|}
+
 \hline
 n & General (s) & Specialized (s) & LU decomp. (s) \\
 \hline
@@ -364,7 +374,35 @@ $10^7$ & 31.8 & 15.5 & -\\
 \end{tabular}
 \end{table}
 
+\section{Discussion}
+
+In terms of accuracy we see from figure \ref{fig1}, \ref{fig2}, \ref{fig3} that there is no difference between the general and special algorithm for solving the Poisson equation. Their only difference was their speed. The special algorithm being the superior computing method, see table \ref{speed}. The general and special algorithm used a lot less time than the LU decomposition algorithm. This was expected before the computations was done because of the FLOP count difference between the methods. Because of the larger timeconsumption of the LU decomposition method no specific value was found, but for a matrix of size $10^4 \times 10^4$ was  guesstimated to be about $100.000$ seconds because of the increase in timeconsumption between the smaller matrices. They had a timeconsumption increas of a factor $10^3$ as $n$ increased by $1$. Following this logic we should expect to encounter a memory error when $n \geq 5$.
+The max relative error was examined and was found to be decreasing when the steplength went from a magnitude of $10^{-7}$ to $10^{-6}$ where is was at it`s lowest. Looking at table \ref{fig4}, the relative error almost increases linearly with the subsequent changes in steplength magnitude. This correlates to an exponential increase in relative error if the error was plottet against the steplength and not the briggsian logarithm of the steplength. 
+
+
+
+\section{Conclusion}
+In this paper we have derived both a general and special algorithm for computing the solution of the Poisson equation. The algorithms where compared against the LU decomposition method for solving the system of equations, and the maximal relative error was plotted as a function of the steplength used in the specialized algorithm. 
+\newline
+The fastest algorithm for solving the Poisson equation was found to be the specialized algorithm. The accuracy of the general and special algorithm where the same. Optimally the steplenght for the specialized algorithm should be of a magnitude $10^{-6}$ to produce the minimal relative error. The relative error increases exponentially as the magnitude of the steplenght goes from $10^{-6}$ to $10^{-1}$. 
+
+
+
 \section{References}
+ 
+[1]:
+Code by Morten Hjorth-Jensen (the first 200 lines are used):
+\newline
+\url{https://github.com/CompPhysics/ComputationalPhysics/blob/master/doc/Programs/LecturePrograms/programs/pythonLibrary/computationalLib.py?fbclid=IwAR0hMqS-TO0L7oBTiWEY3jGUNgwFayE9ej4SN37zovWCsiJGrQUPqxSwXKk}
+\newline
+\newline
+[2]: Lecture notes FYS3150, Fall 2015, by Morten Hjorth-Jensen. Chapter 6.
+\newline
+\url{https://github.com/CompPhysics/ComputationalPhysics/blob/master/doc/Lectures/lectures2015.pdf}
+
+
+
+
 
 
 \end{document}
