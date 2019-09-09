@@ -86,11 +86,11 @@ def optimized(n, h):
 
     print('time spent for n = %g points with optimized algorithm was %.7e s' % (n, end - start))
 
-    u_s = np.hstack([0, u_s, 0]) # adding the boundary conditions on the optimized solution
-
     # finding the relative error of the algorithm
     u_a = closed_form(x[1:-1])
     error_a = np.log10(np.abs((u_s-u_a)/u_a))
+
+    u_s = np.hstack([0, u_s, 0])  # adding the boundary conditions on the optimized solution
 
     return x, u_s, error_a, max(error_a)
 
@@ -101,19 +101,25 @@ x_s, us, error_a, error_max1 = optimized(n[j], h[j])
 
 plt.title('numerical and analytical solution with n=%g' % n[j])
 plt.plot(x_g, closed_form(x_g), label='analytic')
-plt.plot(x_g, ug, 'ro', label='general numeric')
+plt.plot(x_g, ug, label='general numeric')
 plt.plot(x_s, us, label='special numeric')
+plt.xlabel('position, x')
+plt.ylabel('u(x)')
 plt.legend()
 plt.show()
 
 # finding the max error of the optimized algorithm and plots it as a function of the briggsian logarithm of the
-# steplength h
+# steplength h and comparing time spent for different n
 error_max = np.zeros(len(n))
-fig, ax = plt.subplots(1)
+#fig, ax = plt.subplots(1)
 for l in range(len(n)):
+    x_g, ug = general(n[l], h[l])
     x_s1, u_s, error, error_max[l] = optimized(n[l], h[l])
-    ax.plot(x_s1[1:-1], error)
-plt.show()
+    #ax.plot(x_s1[1:-1], error, label = '$\epsilon(x) for n = %g' % n[l])
+#plt.xlabel('x')
+#plt.ylabel('relative error $\epsilon(x)$')
+#plt.legend()
+#plt.show()
 
 plt.plot(np.log10(h), error_max)
 plt.xlabel('$log_{10}(h)$')
