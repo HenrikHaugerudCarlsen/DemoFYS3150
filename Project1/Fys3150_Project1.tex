@@ -309,6 +309,59 @@ When this is done the decomposed system can be solved by first solving $L\vec{z}
 
 \section{Results}
 
+Using both our general and specialized algorithm we can compute the numerical solution to our matrix equation. This was done for $n$ that ranged from $n = 10^1$ up to $n = 10^7$. Here the resulting plots for $n = 10, 10^3$ and $10^5$ is shown. That gives the plots
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.5]{poisson_n1.png}
+\caption{analytical, general and specialized solution to the poisson equation for $n = 10^1$}\label{fig1}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.5]{poisson_n3.png}
+\caption{analytical, general and specialized solution to the poisson equation for $n = 10^3$}\label{fig2}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.5]{poisson_n5.png}
+\caption{analytical, general and specialized solution to the poisson equation for $n = 10^5$}\label{fig3}
+\end{figure}
+
+At the same time we computed the relative error of the specialized algorithm against the analytical solution to our problem so we could get a relation between the max relative error of the calculations and the steplengths, $h$. This was found using equation \ref{eq?} and by plotting the maximum error of each steplength as a function of the briggsian logarithm of $h$ we got the plot 
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.5]{max_rel_error.png}
+\caption{the max relative error plotted as a function of $log_{10}(h)$}\label{fig4}
+\end{figure}
+
+the time spent computing the numerical solution was found, there was also used a even more general LU decomposition algorithm to compare the time spent. The time spent is presented in a tabular form
+
+\begin{table}[h]
+\caption{time spent for general, specialized and LU decomposition for the different $n$}\label{tab1}\center
+\begin{tabular}{|c|c|c|c|}
+\hline
+n & General (s) & Specialized (s) & LU decomp. (s) \\
+\hline
+$10^1$ & $<1\cdot10^{-4}$ & $<1\cdot10^{-4}$ & $<1\cdot10^{-3}$ \\
+\hline
+$10^2$ & $1\cdot10^{-3}$ & $<1\cdot10^{-3}$ & 0.14 \\
+\hline
+$10^3$ & $5\cdot10^{-3}$ & $4\cdot10^{-3}$ & 154 \\
+\hline
+$10^4$ & $5.7\cdot10^{-2}$ & $1.7\cdot10^{-2}$ & -\\
+\hline
+$10^5$ & $3.9\cdot10^{-1}$ & $1.9\cdot10^{-1}$ & - \\
+\hline
+$10^6$ & 3.4 & 1.6 & -\\
+\hline
+$10^7$ & 31.8 & 15.5 & -\\
+\hline
+\end{tabular}
+\end{table}
+
 \section{References}
 
 
