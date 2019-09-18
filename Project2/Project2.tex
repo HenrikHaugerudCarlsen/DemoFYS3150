@@ -1,0 +1,91 @@
+\documentclass[english,a4paper, 11pt]{article}
+\usepackage[T1]{fontenc} %for å bruke æøå
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx} %for å inkludere grafikk
+\usepackage{verbatim} %for å inkludere filer med tegn LaTeX ikke liker
+\usepackage{mathpazo}
+\usepackage{hyperref}
+\usepackage{float}
+\usepackage{gensymb}
+\usepackage{amsmath}
+
+\title{FYS3150: Project 2}
+\author{Henrik Haugerud Carlsen and Martin Moen Carstensen}
+\date{\today}
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\centering
+
+\end{abstract}
+
+
+\section{Introduction}
+
+To show that the Jacobi mathod can be used it is important to show that an orthogonal(or unitary) transformation of a basis preserves the orthogonality trait of the basis.
+Lets consider a basis. $\vec{v_i}$:
+
+\begin{equation}
+\mathbf{v}_i = \begin{bmatrix} v_{i1} \\ \dots \\ \dots \\v_{in} \end{bmatrix}
+\label{eq1}
+\end{equation}
+
+The basis is assumed to be orthogonal, which implies the following trait: $ \vec{v_j}^T\vec{v_i} = \delta_{ij}$. Our task is not to show that a transformation $U\vec{v_i} = \vec{w_i}$ preserves the orthogonality, such that :
+
+\begin{equation}
+\vec{w_j}^T\vec{w_i} = \delta_{ij}\;,
+\label{eq2}
+\end{equation}
+
+which equates to
+
+\begin{equation}
+(U\vec{v_j})^T U\vec{v_i} = \delta_{ij}\;.
+\label{eq3}
+\end{equation}
+
+Since the transformation is considered orthogonal we have $(AB)^T = B^TA^T$ and $U^TU = UU^T = I$, giving us
+
+\begin{equation}
+\vec{v_j}^TU^TU\vec{v_i} = \vec{v_j}I\vec{v_i} = \delta_{ij}\;,
+\label{eq4}
+\end{equation}
+
+returning us to the original expression for orthogonality of the dot product:
+
+\begin{equation}
+\vec{v_j}\vec{v_i} = \delta_{ij}\;.
+\label{eq5}
+\end{equation}
+
+Thus we have shown that orthogonality is perserved under the transformation $U$.
+
+
+
+\section{Method}
+
+
+\section{Results}
+
+
+\section{Discussion}
+
+
+
+
+\section{Conclusion}
+
+
+
+\section{References}
+ 
+
+
+
+
+
+
+\end{document}
+
