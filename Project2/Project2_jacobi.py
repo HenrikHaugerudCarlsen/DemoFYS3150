@@ -1,45 +1,7 @@
 import numpy as np, matplotlib.pyplot as plt
 
-#defining constants
-tol = 1e-7
-n = 10
-h = 1./(n+1)
-d = 2./(h**2)
-a = -1./(h**2)
-max_iteration = n**2
-iteration = 0
-
-#setting matrix elements
-A = np.zeros((n, n))
-A[0,0] = d; A[0,1] = a; A[-1,-1] = d; A[-1,-2] = a
-
-
-for i in range(1, n-1): # generating the tridiagonal matrix A
-    for j in range(1, n-1):
-        if i == j:
-            A[i, j] = d
-            A[i, j+1] = a
-            A[i, j-1] = a
-
-#generating eigenvector matrix
-U = np.zeros((n,n))
-for i in range(n):
-    for j in range(n):
-        if i == j:
-            U[i,j] = 1
-
-print(A)
-eig = np.linalg.eigh(A)
-print(eig[0])
-
-j = np.linspace(1,n,n)
-print(j)
-lam = d + 2*a*np.cos((j*np.pi)/(n+1))
-print(lam)
-
 #Jacobis method
 
-#tau = np.zeros(n-1)
 def max_nondiag(A, n):
     max = 0
     k = 0
@@ -51,22 +13,20 @@ def max_nondiag(A, n):
                 k = i
                 l = j
     return max, k, l
-max, k, l = max_nondiag(A,n)
-print(k,l)
 
 def rotate(A, U, k, l, n):
     if A[k,l] != 0:
         tau = (A[l,l]-A[k,k])/(2*A[k,l])
 
         if tau > 0:
-            t = 1. / (-tau + np.sqrt(1. + tau*tau))
+            t = 1. / (tau + np.sqrt(1. + tau**2))
         else:
-            t = -1. / (-tau + np.sqrt(1. + tau*tau))
+            t = 1. / (tau - np.sqrt(1. + tau*tau))
 
         c = 1 / np.sqrt(1 + t**2)
         s = t*c
 
-    else :
+    else:
         c = 1; s = 0
 
     a_kk = A[k,k]
@@ -94,13 +54,54 @@ def rotate(A, U, k, l, n):
 
     return A, U
 
-max = max_nondiag(A, n)[0]
+if __name__ == '__main__':
+    # defining constants
+    tol = 1e-8
+    n = 5
+    h = 1. / (n + 1)
+    d = 2. / (h ** 2)
+    a = -1. / (h ** 2)
+    max_iteration = n ** 3
+    iteration = 0
 
-while max > tol and iteration < max_iteration:
-    max, k, l = max_nondiag(A,n)
-    A, U = rotate(A, U, k, l, n)
-    iteration += 1
-    #print(iteration, k, max)
+    # setting matrix elements
+    A = np.zeros((n, n))
+    A[0, 0] = d; A[0, 1] = a; A[-1, -1] = d; A[-1, -2] = a
 
-for i in range(n):
-    print(A[i,i])
+    for i in range(1, n - 1):  # generating the tridiagonal matrix A
+        for j in range(1, n - 1):
+            if i == j:
+                A[i, j] = d
+                A[i, j + 1] = a
+                A[i, j - 1] = a
+
+    # generating eigenvector matrix
+    U = np.zeros((n, n))
+    for i in range(n):
+        for j in range(n):
+            if i == j:
+                U[i, j] = 1
+
+    max = max_nondiag(A, n)[0]
+
+    while max > tol and iteration < max_iteration:
+        max, k, l = max_nondiag(A, n)
+        A, U = rotate(A, U, k, l, n)
+        iteration += 1
+
+    eig_A = np.zeros(n)
+    for i in range(n):
+        eig_A[i] = A[i, i]
+    eig_A = np.sort(eig_A)
+
+    f_n = open('eigvalues_%g.txt' % n, 'w+')
+
+    for i in range(n):
+        f_n.write('%.2f\n' % eig_A[i])
+
+    p = np.linspace(0,1,n+2)
+
+    plt.plot(p, np.hstack([0,U[:,0],0]), label='solution with eigenvalue %.2f' % A[0, 0])
+
+    plt.legend()
+    plt.show()
