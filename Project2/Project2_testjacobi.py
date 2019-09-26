@@ -8,9 +8,11 @@ def Test_eigvalues():
     tol_eig = 1e-10
     n = 5
     #opening and reading the txt file containing eigenvalues
-    o_file = open(eigvalues_n.txt)
-    if o_file.mode == 'r':
-        contents = o_file.read()
+    eig_A = np.zeros(n)
+    o_file = open('eigvalues_5.txt', 'r')
+    o1 = o_file.readlines()
+    for i in range(len(o1)):
+        eig_A[i] = float(o1[i])
 
     h = 1./(n+1)
     d = 2. / (h**2)
@@ -20,6 +22,7 @@ def Test_eigvalues():
 
     for i in range(n):
         success = abs(eig[i] - eig_A[i]) < tol_eig
+        print(abs(eig[i]-eig_A[i]))
         msg = 'Analytical eigenvalue = %.2f , computed eigenvalue = %.2f' %(eig[i], eig_A[i])
 
         assert success, msg
