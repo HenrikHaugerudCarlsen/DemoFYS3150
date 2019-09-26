@@ -97,7 +97,7 @@ if __name__ == '__main__':
     f_n = open('eigvalues_%g.txt' % n, 'w+')
 
     for i in range(n):
-        f_n.write('%.2f\n' % eig_A[i])
+        f_n.write('%.12f\n' % eig_A[i])
 
     p = np.linspace(0,1,n+2)
 
