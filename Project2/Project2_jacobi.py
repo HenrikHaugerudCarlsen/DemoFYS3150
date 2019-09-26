@@ -2,7 +2,7 @@ import numpy as np, matplotlib.pyplot as plt
 
 #Jacobis method
 
-def max_nondiag(A, n):
+def max_nondiag(A, n): #defining function for finding the max nondiagonal element
     max = 0
     k = 0
     l = 0
@@ -14,7 +14,7 @@ def max_nondiag(A, n):
                 l = j
     return max, k, l
 
-def rotate(A, U, k, l, n):
+def rotate(A, U, k, l, n): # defining function for unitary transforms of the matrix elements
     if A[k,l] != 0:
         tau = (A[l,l]-A[k,k])/(2*A[k,l])
 
@@ -69,11 +69,9 @@ if __name__ == '__main__':
     A[0, 0] = d; A[0, 1] = a; A[-1, -1] = d; A[-1, -2] = a
 
     for i in range(1, n - 1):  # generating the tridiagonal matrix A
-        for j in range(1, n - 1):
-            if i == j:
-                A[i, j] = d
-                A[i, j + 1] = a
-                A[i, j - 1] = a
+        A[i, i] = d
+        A[i, i + 1] = a
+        A[i, i - 1] = a
 
     # generating eigenvector matrix
     U = np.zeros((n, n))
@@ -82,7 +80,7 @@ if __name__ == '__main__':
             if i == j:
                 U[i, j] = 1
 
-    max = max_nondiag(A, n)[0]
+    max = max_nondiag(A, n)[0] 
 
     while max > tol and iteration < max_iteration:
         max, k, l = max_nondiag(A, n)
