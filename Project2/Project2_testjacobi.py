@@ -5,7 +5,7 @@ from Project2_jacobi import max_nondiag, rotate
 
 def Test_eigvalues():
 
-    tol_eig = 1e-10
+    tol_eig = 1e-102
     n = 5
     #opening and reading the txt file containing eigenvalues
     eig_A = np.zeros(n)
