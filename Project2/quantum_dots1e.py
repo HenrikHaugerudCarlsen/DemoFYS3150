@@ -1,8 +1,16 @@
-import numpy as np
-import matplotlib.pyplot as plt
+import numpy as np, matplotlib.pyplot as plt
 from Project2_jacobi import max_nondiag, rotate
 
-N = 99
+#plot formatting
+plt.style.use('ggplot')
+
+font = {'family' : 'serif',
+        'weight' : 'normal',
+        'style'  : 'normal',
+        'size'   : 20}
+plt.rc('font', **font)
+
+N = 10
 p0 = 0
 p_max = 10
 h = float(p_max)/(N+1)
@@ -42,7 +50,11 @@ for i in range(N):
 
 idx = np.where(eig_A == np.min(eig_A))[0]
 print(idx)
-plt.plot(np.hstack([0,p,p_max]), np.hstack([0,U[:,idx[0]],0]))
+plt.title('Wavefunction')
+
+plt.plot(np.hstack([0,p,p_max]), np.hstack([0,U[:,idx[0]],0]), label = 'psi, N = %g' %(N))
+
+plt.legend()
 plt.show()
 
 eig_A = np.sort(eig_A)
@@ -52,8 +64,20 @@ def analytical_eigv(x):
     lamb = 4*x-1
     return lamb
 
-plt.plot(j, eig_A, 'r.')
-plt.plot(j, analytical_eigv(j), 'g*')
+#setting font size
+
+plt.title('Eigenvalues')
+plt.xlabel('Diagonal element i')
+plt.ylabel('Eigenvalue')
+plt.plot(j, eig_A, 'r.', label = 'Computed value')
+plt.legend()
+plt.plot(j, analytical_eigv(j), 'g*', label = 'Analytical value')
+plt.legend()
 plt.show()
-plt.plot(j, abs(eig_A - analytical_eigv(j)))
+
+plt.title('|Analytical value - computed value|')
+plt.xlabel('Diagonal element i')
+plt.ylabel('Absolute difference')
+
+plt.plot(j,abs(eig_A - analytical_eigv(j)))
 plt.show()

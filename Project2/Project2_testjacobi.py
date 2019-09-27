@@ -39,7 +39,7 @@ def Test_maxnondiag(): #making testfunction for testing that the right max non_d
             A[j,i] = A[i,j] # generating random symmetrical matrix
     #print(A)
     max = np.max(A)
-    k,l = np.where(A == max
+    k,l = np.where(A == max)
     max_c, k_c, l_c = max_nondiag(A, n)
     #print(max, max_c, k, k_c, l, l_c)
 

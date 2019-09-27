@@ -1,4 +1,11 @@
 import numpy as np, matplotlib.pyplot as plt
+plt.style.use('ggplot')
+
+font = {'family' : 'serif',
+        'weight' : 'normal',
+        'style'  : 'normal',
+        'size'   : 10}
+plt.rc('font', **font)
 
 #Jacobis method
 
@@ -15,7 +22,8 @@ def max_nondiag(A, n): #defining function for finding the max nondiagonal elemen
     return max, k, l
 
 def rotate(A, U, k, l, n): # defining function for unitary transforms of the matrix elements
-    if A[k,l] != 0:
+    if A[k,l] != 0: #checking if elements are non-zero
+        #defining tau, t, c and s
         tau = (A[l,l]-A[k,k])/(2*A[k,l])
 
         if tau > 0:
@@ -26,12 +34,13 @@ def rotate(A, U, k, l, n): # defining function for unitary transforms of the mat
         c = 1 / np.sqrt(1 + t**2)
         s = t*c
 
-    else:
+    else: # if elements are not non-zero:
         c = 1; s = 0
-
+#Setting element-values as constants to reduce memory reads
     a_kk = A[k,k]
     a_ll = A[l,l]
     a_kl = A[k,l]
+#Updating elements with algorithm
     A[k,k] = a_kk*c**2 - 2*a_kl*c*s + a_ll*s**2
     A[l,l] = a_ll*c**2 + 2*a_kl*c*s + a_kk*s**2
     A[k,l] = 0
@@ -80,7 +89,7 @@ if __name__ == '__main__':
             if i == j:
                 U[i, j] = 1
 
-    max = max_nondiag(A, n)[0] 
+    max = max_nondiag(A, n)[0]
 
     while max > tol and iteration < max_iteration:
         max, k, l = max_nondiag(A, n)
