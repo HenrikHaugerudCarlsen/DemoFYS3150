@@ -1,4 +1,5 @@
 import numpy as np, matplotlib.pyplot as plt
+
 plt.style.use('ggplot')
 
 font = {'family' : 'serif',
@@ -66,7 +67,7 @@ def rotate(A, U, k, l, n): # defining function for unitary transforms of the mat
 if __name__ == '__main__':
     # defining constants
     tol = 1e-8
-    n = 5
+    n = 100
     h = 1. / (n + 1)
     d = 2. / (h ** 2)
     a = -1. / (h ** 2)
@@ -99,7 +100,6 @@ if __name__ == '__main__':
     eig_A = np.zeros(n)
     for i in range(n):
         eig_A[i] = A[i, i]
-    eig_A = np.sort(eig_A)
 
     f_n = open('eigvalues_%g.txt' % n, 'w+')
 
@@ -108,7 +108,35 @@ if __name__ == '__main__':
 
     p = np.linspace(0,1,n+2)
 
-    plt.plot(p, np.hstack([0,U[:,0],0]), label='solution with eigenvalue %.2f' % A[0, 0])
+    idx1 = np.where(eig_A == np.min(eig_A))[0]
+    max2 = np.max(eig_A)
+    idx2 = 0
+    for i in range(len(eig_A)):
+        if eig_A[i] != np.min(eig_A):
+            if eig_A[i] < max2:
+                max2 = eig_A[i]
+                idx2 = i
 
+    max3 = np.max(eig_A)
+    idx3 = 0
+    for i in range(len(eig_A)):
+        if i != idx2 and i != idx1[0]:
+            if eig_A[i] < max3:
+                max3 = eig_A[i]
+                idx3 = i
+
+    print(idx2, idx1[0], idx3)
+
+    plt.title(r'Displacement of beam for $\lambda_0$ = %.2f, $\lambda_1$ = %.2f and $\lambda_2$ = %.2f'\
+    % (A[idx1[0],idx1[0]], A[idx2, idx2], A[idx3, idx3]))
+    figure = plt.plot(p, np.hstack([0,U[:,idx2],0]), label=r'u($\rho$), $\lambda_1$ = %.2f' % A[idx2, idx2])
+    plt.plot(p, np.hstack([0,U[:,idx1[0]],0]), label=r'u($\rho$), $\lambda_0$ = %.2f' % A[idx1[0], idx1[0]])
+    plt.plot(p, np.hstack([0,U[:,idx3],0]), label=r'u($\rho$), $\lambda_2$ = %.2f' % A[idx3, idx3])
+    plt.xlabel(r'$\rho$')
+    plt.ylabel(r'u($\rho$)')
     plt.legend()
-    plt.show()
+    plt.savefig('BucklingBeamlambda.pdf')
+    plt.close()
+
+
+    #plt.show()
