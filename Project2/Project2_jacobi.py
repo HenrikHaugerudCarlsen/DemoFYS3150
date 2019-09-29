@@ -64,10 +64,9 @@ def rotate(A, U, k, l, n): # defining function for unitary transforms of the mat
 
     return A, U
 
-if __name__ == '__main__':
-    # defining constants
+def solution(N):
     tol = 1e-8
-    n = 100
+    n = int(N)
     h = 1. / (n + 1)
     d = 2. / (h ** 2)
     a = -1. / (h ** 2)
@@ -76,12 +75,12 @@ if __name__ == '__main__':
 
     # setting matrix elements
     A = np.zeros((n, n))
-    A[0, 0] = d; A[0, 1] = a; A[-1, -1] = d; A[-1, -2] = a
+    A[-1, -1] = d;
 
-    for i in range(1, n - 1):  # generating the tridiagonal matrix A
+    for i in range(n - 1):  # generating the tridiagonal matrix A
         A[i, i] = d
         A[i, i + 1] = a
-        A[i, i - 1] = a
+        A[i + 1, i] = a
 
     # generating eigenvector matrix
     U = np.zeros((n, n))
@@ -101,12 +100,26 @@ if __name__ == '__main__':
     for i in range(n):
         eig_A[i] = A[i, i]
 
-    f_n = open('eigvalues_%g.txt' % n, 'w+')
+    return U, eig_A, iteration
 
-    for i in range(n):
+if __name__ == '__main__':
+    n_min = 10
+    n_max = 100
+    j = 10
+    n = np.linspace(n_min, n_max, j)
+
+    for i in range(j):
+        iteration = solution(n[i])[-1]
+        print('number of iterations is %g for n = %g' % (iteration, n[i]))
+
+    U, eig_A, iteration = solution(n_max)
+
+    f_n = open('eigvalues_%g.txt' % n_max, 'w+')
+
+    for i in range(n_max):
         f_n.write('%.12f\n' % eig_A[i])
 
-    p = np.linspace(0,1,n+2)
+    p = np.linspace(0,1,n_max+2)
 
     idx1 = np.where(eig_A == np.min(eig_A))[0]
     max2 = np.max(eig_A)
@@ -125,18 +138,14 @@ if __name__ == '__main__':
                 max3 = eig_A[i]
                 idx3 = i
 
-    print(idx2, idx1[0], idx3)
-
     plt.title(r'Displacement of beam for $\lambda_0$ = %.2f, $\lambda_1$ = %.2f and $\lambda_2$ = %.2f'\
-    % (A[idx1[0],idx1[0]], A[idx2, idx2], A[idx3, idx3]))
-    figure = plt.plot(p, np.hstack([0,U[:,idx2],0]), label=r'u($\rho$), $\lambda_1$ = %.2f' % A[idx2, idx2])
-    plt.plot(p, np.hstack([0,U[:,idx1[0]],0]), label=r'u($\rho$), $\lambda_0$ = %.2f' % A[idx1[0], idx1[0]])
-    plt.plot(p, np.hstack([0,U[:,idx3],0]), label=r'u($\rho$), $\lambda_2$ = %.2f' % A[idx3, idx3])
+    % (eig_A[idx1[0]], eig_A[idx2], eig_A[idx3]))
+    figure = plt.plot(p, np.hstack([0,U[:,idx2],0]), label=r'u($\rho$), $\lambda_1$ = %.2f' % eig_A[idx2])
+    plt.plot(p, np.hstack([0,U[:,idx1[0]],0]), label=r'u($\rho$), $\lambda_0$ = %.2f' % eig_A[idx1[0]])
+    plt.plot(p, np.hstack([0,U[:,idx3],0]), label=r'u($\rho$), $\lambda_2$ = %.2f' % eig_A[idx3])
     plt.xlabel(r'$\rho$')
     plt.ylabel(r'u($\rho$)')
     plt.legend()
     plt.savefig('BucklingBeamlambda.pdf')
     plt.close()
-
-
-    #plt.show()
+    plt.show()
