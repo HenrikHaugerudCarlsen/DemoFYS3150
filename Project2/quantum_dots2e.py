@@ -12,7 +12,7 @@ w_r = np.array([0.01, 0.5, 1, 5])
 p = p0 + j*h
 def plot(w_r, ind):
     e = -1./(h**2)
-    d = 2/(h**2) + w_r**2 * p**2 + (1/p)
+    d = 2/(h**2) + w_r**2 * p**2 #+ (1/p) repulsion term
 
     A = np.zeros((N,N))
     A[-1, -1] = d[-1]
@@ -58,4 +58,5 @@ for i in range(len(w_r)):
     plt.legend()
 
 plt.suptitle(r'the groundstate for different frequencies $\omega_r$')
+plt.savefig('groundstates.pdf')
 plt.show()
